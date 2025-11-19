@@ -17,6 +17,7 @@ tb_cli_cursoSQL as(
 
 Select count(DISTINCT t1.idCliente) AS clienteJaneiro,
        count(DISTINCT t2.idCliente) AS clienteCursoSQL
+       -- comentario
 
 from tb_cli_jan as t1
 
