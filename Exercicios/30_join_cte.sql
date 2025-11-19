@@ -18,36 +18,22 @@ WITH tb_diaUm AS (
     WHERE substr(DtCriacao, 1, 10) = '2025-08-25'
 ),
 
-tb_diaDois AS (
-    SELECT DISTINCT IdCliente
+tb_join AS (
 
-    FROM transacoes
+SELECT substr(t2.DtCriacao, 1, 10) AS dtDia,
+       count(distinct t1.idcliente) AS qtdeCliente,
+       round(1.* count(DISTINCT t1.idCliente) / (select count(*) from tb_DiaUm),3) AS '%retencao',
+       1 - round(1.* count(DISTINCT t1.idCliente) / (select count(*) from tb_DiaUm),3) AS '%Churn'
 
-    WHERE substr(DtCriacao, 1, 10) = '2025-08-26'
-),
 
-tb_diaTres AS (
-    SELECT DISTINCT IdCliente
+FROM tb_diaUm AS t1
+LEFT JOIN transacoes AS t2
+ON t1.idCliente = t2.idCliente
 
-    FROM transacoes
+WHERE t2.DtCriacao >= '2025-08-25'
+AND t2.DtCriacao < '2025-08-30'
 
-    WHERE substr(DtCriacao, 1, 10) = '2025-08-27'
-),
-
-tb_diaQuatro AS (
-    SELECT DISTINCT IdCliente
-
-    FROM transacoes
-
-    WHERE substr(DtCriacao, 1, 10) = '2025-08-28'
-),
-
-tb_diaCinco AS (
-    SELECT DISTINCT IdCliente
-
-    FROM transacoes
-
-    WHERE substr(DtCriacao, 1, 10) = '2025-08-29'
+GROUP BY dtDia
 )
 
-SELECT 
+Select * from tb_join
